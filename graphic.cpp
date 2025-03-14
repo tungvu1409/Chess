@@ -1,9 +1,10 @@
 #include "graphic.h"
 #include <iostream>
+#include "board.h"
 
 void graphic::init(){
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "SDL không thể khởi tạo! Lỗi: " << SDL_GetError() << std::endl;
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        std::cerr << "Unable to initialize SDL! Error: " << SDL_GetError() << std::endl;
 
     }
     window = SDL_CreateWindow("Chess",
@@ -11,14 +12,20 @@ void graphic::init(){
                               800, 600,
                               SDL_WINDOW_SHOWN);
     if (!window) {
-        std::cerr << "Không thể tạo cửa sổ! Lỗi: " << SDL_GetError() << std::endl;
-        SDL_Quit();
+        std::cerr << "Could not create window! Error: " << SDL_GetError() << std::endl;
+
     }
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer) {
+        std::cerr << "COuld not create renderer! Error: " << SDL_GetError() << std::endl;
+    }
+
 }
 
 void graphic::run() {
     bool running = true;
     SDL_Event event;
+    Board board;
 
     while (running) {
         while (SDL_PollEvent(&event)) {
@@ -26,6 +33,16 @@ void graphic::run() {
                 running = false;
             }
         }
+        SDL_Delay(16);
+        // Xóa màn hình
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderClear(renderer);
+
+        // Vẽ bàn cờ
+        board.draw(renderer);
+
+        // Cập nhật màn hình
+        SDL_RenderPresent(renderer);
         SDL_Delay(16);
     }
 

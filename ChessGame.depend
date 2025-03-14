@@ -3,10 +3,14 @@
 	<SDL.h>
 	"graphic.h"
 
-1741930588 e:\chessgame\graphic.h
+1741960776 e:\chessgame\graphic.h
 	<SDL.h>
 
-1741929162 source:e:\chessgame\graphic.cpp
+1741961603 source:e:\chessgame\graphic.cpp
 	"graphic.h"
 	<iostream>
+	"board.h"
+
+1741961687 e:\chessgame\board.h
+	<SDL.h>
 

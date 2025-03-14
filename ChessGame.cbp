@@ -32,6 +32,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="board.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="board.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="graphic.cpp" />
 		<Unit filename="graphic.h">
 			<Option target="&lt;{~None~}&gt;" />

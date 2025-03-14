@@ -5,7 +5,7 @@
 
 struct graphic {
     SDL_Window* window = nullptr;
-
+    SDL_Renderer* renderer = nullptr;
 
 
     void init();
@@ -13,4 +13,4 @@ struct graphic {
 
 };
 
-#endif // GRAPHIC_H_INCLUDED
+#endif
