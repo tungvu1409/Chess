@@ -1,8 +1,10 @@
-#include <iostream>
-#include "Game.h"
-#include "Board.h"
-int main(){
-    Game game;
-    game.run();
+
+#include <SDL.h>
+#include "graphic.h"
+
+int main(int argc, char* argv[]){
+    graphic graph;
+    graph.init();
+    graph.run();
     return 0;
 }

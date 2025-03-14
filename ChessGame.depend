@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1741930875 source:e:\chessgame\main.cpp
+	<SDL.h>
+	"graphic.h"
+
+1741930588 e:\chessgame\graphic.h
+	<SDL.h>
+
+1741929162 source:e:\chessgame\graphic.cpp
+	"graphic.h"
+	<iostream>
+
