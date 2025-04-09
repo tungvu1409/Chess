@@ -3,6 +3,68 @@
 	<SDL.h>
 	"graphic.h"
 
-1742622295 e:\chessgame\graphic.h
+1741960776 e:\chessgame\graphic.h
 	<SDL.h>
+
+1741962150 source:e:\chessgame\graphic.cpp
+	"graphic.h"
+	<iostream>
+	"board.h"
+
+1741961687 e:\chessgame\board.h
+	<SDL.h>
+
+1742623308 source:e:\chessgame\src\main.cpp
+	<SDL.h>
+	"graphic.h"
+
+1744171434 e:\chessgame\src\graphic.h
+	<SDL_ttf.h>
+	<SDL.h>
+	<string>
+
+1744172382 source:e:\chessgame\src\graphic.cpp
+	"graphic.h"
+	<iostream>
+	"board.h"
+
+1743569390 e:\chessgame\src\board.h
+	"pawn.h"
+	"king.h"
+	"rook.h"
+	"bishop.h"
+	"queen.h"
+	"knight.h"
+	<SDL.h>
+	<SDL_image.h>
+	<vector>
+	"piece.h"
+
+1743569390 source:e:\chessgame\src\board.cpp
+	"board.h"
+	<iostream>
+	<algorithm>
+
+1742623150 source:e:\chessgame\src\king.cpp
+
+1743515801 e:\chessgame\src\piece.h
+	<vector>
+
+1743513379 e:\chessgame\src\pawn.h
+	"piece.h"
+
+1743513345 e:\chessgame\src\king.h
+	"piece.h"
+
+1743513345 e:\chessgame\src\rook.h
+	"piece.h"
+
+1743513345 e:\chessgame\src\bishop.h
+	"piece.h"
+
+1743513345 e:\chessgame\src\queen.h
+	"piece.h"
+
+1743513345 e:\chessgame\src\knight.h
+	"piece.h"
 
