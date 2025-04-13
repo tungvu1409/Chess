@@ -1,0 +1,275 @@
+#include "board.h"
+#include <iostream>
+#include <algorithm>
+
+bool turnIsWhite = true;  // Trắng đi trước
+
+void Board::draw(SDL_Renderer* renderer) {
+    int tileSize = 75;
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            if ((row + col) % 2 == 0) {
+                SDL_SetRenderDrawColor(renderer, 107, 142, 35, 255);
+            } else {
+                SDL_SetRenderDrawColor(renderer, 227, 218, 201, 255);
+            }
+
+            SDL_Rect rect = { col * tileSize, row * tileSize, tileSize, tileSize };
+            SDL_RenderFillRect(renderer, &rect);
+        }
+    }
+
+    for (Piece* piece : pieces) {
+        SDL_Rect pieceRect = { piece->getCol() * tileSize, piece->getRow() * tileSize, tileSize, tileSize };
+
+        SDL_RenderCopy(renderer, pieceTextures[piece->getType() + (piece->isWhite ? 0 : 6)], NULL, &pieceRect);
+    }
+    displayCheckWarning(renderer);
+    SDL_RenderPresent(renderer);
+}
+
+SDL_Texture* loadTexture(const char* path, SDL_Renderer* renderer) {
+    SDL_Surface* loadedSurface = IMG_Load(path);
+    if (!loadedSurface) {
+        std::cerr << "Không thể load ảnh! Lỗi: " << IMG_GetError() << std::endl;
+        return nullptr;
+    }
+
+    SDL_Texture* newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+    SDL_FreeSurface(loadedSurface);
+    return newTexture;
+}
+
+void Board::init(SDL_Renderer* renderer) {
+    pieceTextures[0] = loadTexture("E:/ChessGame/img/king1.png", renderer);
+    pieceTextures[1] = loadTexture("E:/ChessGame/img/queen1.png", renderer);
+    pieceTextures[2] = loadTexture("E:/ChessGame/img/rook1.png", renderer);
+    pieceTextures[3] = loadTexture("E:/ChessGame/img/bishop1.png", renderer);
+    pieceTextures[4] = loadTexture("E:/ChessGame/img/knight1.png", renderer);
+    pieceTextures[5] = loadTexture("E:/ChessGame/img/pawn1.png", renderer);
+
+    pieceTextures[6] = loadTexture("E:/ChessGame/img/king2.png", renderer);
+    pieceTextures[7] = loadTexture("E:/ChessGame/img/queen2.png", renderer);
+    pieceTextures[8] = loadTexture("E:/ChessGame/img/rook2.png", renderer);
+    pieceTextures[9] = loadTexture("E:/ChessGame/img/bishop2.png", renderer);
+    pieceTextures[10] = loadTexture("E:/ChessGame/img/knight2.png", renderer);
+    pieceTextures[11] = loadTexture("E:/ChessGame/img/pawn2.png", renderer);
+
+    // Trắng
+    pieces.push_back(new King(0, 4, true));
+    pieces.push_back(new Queen(0, 3, true));
+    pieces.push_back(new Rook(0, 0, true));
+    pieces.push_back(new Rook(0, 7, true));
+    pieces.push_back(new Bishop(0, 2, true));
+    pieces.push_back(new Bishop(0, 5, true));
+    pieces.push_back(new Knight(0, 1, true));
+    pieces.push_back(new Knight(0, 6, true));
+    for (int i = 0; i < 8; i++)
+        pieces.push_back(new Pawn(1, i, true));
+
+    // Đen
+    pieces.push_back(new King(7, 4, false));
+    pieces.push_back(new Queen(7, 3, false));
+    pieces.push_back(new Rook(7, 0, false));
+    pieces.push_back(new Rook(7, 7, false));
+    pieces.push_back(new Bishop(7, 2, false));
+    pieces.push_back(new Bishop(7, 5, false));
+    pieces.push_back(new Knight(7, 1, false));
+    pieces.push_back(new Knight(7, 6, false));
+    for (int i = 0; i < 8; i++)
+        pieces.push_back(new Pawn(6, i, false));
+
+    }
+
+void Board::handleMouseClick(int x, int y) {
+    if (gameOver) return;
+
+    int row = y / 75;
+    int col = x / 75;
+
+    if (!selectedPiece) {
+        // Chọn quân cờ
+        for (Piece* piece : pieces) {
+            if (piece->getRow() == row && piece->getCol() == col && piece->isWhite == turnIsWhite) {
+                selectedPiece = piece;
+                return;
+            }
+        }
+    } else {
+        // Kiểm tra xem quân cờ có thể di chuyển không
+        if (selectedPiece->isValidMove(row, col, pieces)) {
+            // Lưu lại vị trí trước khi di chuyển quân
+            int oldRow = selectedPiece->getRow();
+            int oldCol = selectedPiece->getCol();
+
+            // Di chuyển quân
+            selectedPiece->move(row, col);
+
+            // Kiểm tra xem quân vua có bị chiếu sau khi di chuyển không
+            if (isInCheck(turnIsWhite)) {
+                std::cout << "Vua bị chiếu! Quân cờ không thể di chuyển.\n";
+                // Nếu bị chiếu, khôi phục lại vị trí cũ của quân
+                selectedPiece->move(oldRow, oldCol);
+            } else {
+                // Nếu không bị chiếu, kiểm tra các điều kiện thắng, thua
+                // Ăn quân đối phương nếu có
+                for (auto it = pieces.begin(); it != pieces.end(); ++it) {
+                    Piece* piece = *it;
+                    if (piece->getRow() == row && piece->getCol() == col && piece->isWhite != selectedPiece->isWhite) {
+                        std::cout << "Ăn quân đối phương ở (" << row << ", " << col << ")\n";
+                        if (piece->getType() == KING) {
+                            std::cout << (turnIsWhite ? "White wins!" : "Black wins!") << std::endl;
+                            gameOver = true;  // Kết thúc trò chơi
+                        }
+                        delete piece;
+                        pieces.erase(it);
+                        break;
+                    }
+                }
+
+                // Kiểm tra chiếu hết
+                if (isCheckmate(!turnIsWhite)) {
+                    std::cout << "Checkmate! ";
+                    std::cout << (turnIsWhite ? "White wins!" : "Black wins!") << std::endl;
+                    gameOver = true;
+                }
+
+                // Đổi lượt chơi
+                turnIsWhite = !turnIsWhite;
+            }
+        }
+        selectedPiece = nullptr;
+    }
+}
+
+
+
+bool Board::isInCheck(bool whiteKing) {
+    if (gameOver) return false;  // Nếu game đã kết thúc, không kiểm tra chiếu
+
+    Piece* king = nullptr;
+    for (Piece* p : pieces) {
+        if (p->getType() == KING && p->isWhite == whiteKing) {
+            king = p;
+            break;
+        }
+    }
+    if (!king) return false;
+
+    int kingRow = king->getRow();
+    int kingCol = king->getCol();
+
+    for (Piece* p : pieces) {
+        if (p->isWhite != whiteKing) {
+            if (p->canMoveTo(kingRow, kingCol, pieces)) {
+                std::cout << "Chiếu tướng! Quân vua (" << kingRow << ", " << kingCol
+                          << ") bị tấn công bởi quân "
+                          << (p->isWhite ? "trắng" : "đen") << std::endl;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Board::canBlockCheck(Piece* attackingPiece, Piece* king, std::vector<Piece*>& pieces) {
+    int attackRow = attackingPiece->getRow();
+    int attackCol = attackingPiece->getCol();
+    int kingRow = king->getRow();
+    int kingCol = king->getCol();
+
+    // Lấy hướng di chuyển của quân đối phương (tạo đường nối giữa quân chiếu và vua)
+    int dr = (attackRow == kingRow) ? 0 : (attackRow > kingRow ? 1 : -1);
+    int dc = (attackCol == kingCol) ? 0 : (attackCol > kingCol ? 1 : -1);
+
+    // Kiểm tra các ô giữa quân vua và quân chiếu
+    int r = kingRow + dr, c = kingCol + dc;
+    while (r != attackRow || c != attackCol) {
+        // Kiểm tra nếu có quân nào ở giữa đường chiếu
+        for (Piece* p : pieces) {
+            if (p->getRow() == r && p->getCol() == c && p->isWhite != king->isWhite) {
+                // Quân này có thể chặn đòn chiếu không?
+                auto possibleMoves = p->getAllPossibleMoves(pieces);
+                // Kiểm tra nếu quân có thể di chuyển vào vị trí chặn
+                for (auto& move : possibleMoves) {
+                    if (move.first == attackRow && move.second == attackCol) {
+                        return true;  // Quân có thể chặn được đòn chiếu
+                    }
+                }
+            }
+        }
+        r += dr;
+        c += dc;
+    }
+    return false;  // Không thể chặn đòn chiếu
+}
+
+bool Board::isCheckmate(bool whiteKing) {
+    if (!isInCheck(whiteKing)) return false;  // Nếu không bị chiếu thì không phải là checkmate
+
+    // Duyệt qua tất cả các quân của bên đang bị chiếu
+    for (Piece* p : pieces) {
+        if (p->isWhite == whiteKing) {
+            // Lấy tất cả các nước đi hợp lệ của quân cờ
+            auto possibleMoves = p->getAllPossibleMoves(pieces);
+
+            // Duyệt qua tất cả các nước đi của quân này
+            for (auto& move : possibleMoves) {
+                int oldRow = p->getRow(), oldCol = p->getCol();
+                Piece* captured = getPieceAt(move.first, move.second);
+
+                // Di chuyển quân cờ thử
+                p->move(move.first, move.second);
+
+                // Kiểm tra xem sau khi di chuyển quân cờ, vua còn bị chiếu không
+                bool stillInCheck = isInCheck(whiteKing);
+
+                // Khôi phục lại vị trí cũ
+                p->move(oldRow, oldCol);
+                if (captured) pieces.push_back(captured);
+
+                if (!stillInCheck) {
+                    // Nếu sau khi di chuyển, quân vua không bị chiếu nữa thì không phải checkmate
+                    return false;
+                }
+            }
+
+            // Kiểm tra nếu quân cờ của mình có thể chặn được đòn chiếu
+            for (Piece* p2 : pieces) {
+                if (p2 != p && p2->isWhite == whiteKing && canBlockCheck(p2, p, pieces)) {
+                    return false;  // Nếu có quân cờ có thể chặn đòn chiếu
+                }
+            }
+        }
+    }
+
+    // Nếu không tìm thấy cách thoát khỏi chiếu, đó là checkmate
+    return true;
+}
+
+
+Piece* Board::getPieceAt(int row, int col) {
+    for (Piece* piece : pieces) {
+        if (piece->getRow() == row && piece->getCol() == col) {
+            return piece;
+        }
+    }
+    return nullptr;
+}
+
+
+void Board::displayCheckWarning(SDL_Renderer* renderer) {
+
+    if (isInCheck(turnIsWhite)) {
+        std::cout << "Check! Quân vua bị chiếu!" << std::endl;
+        // Chọn màu khác để dễ nhận diện (đỏ sáng cho cảnh báo)
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Màu đỏ
+        SDL_Rect rect = { 100, 350, 600, 100 };  // Đặt thông báo ở giữa màn hình
+        SDL_RenderFillRect(renderer, &rect);
+
+        // Bạn có thể hiển thị text "Check" nếu muốn
+        // Nếu bạn muốn dùng SDL_ttf để hiển thị chữ, bạn cần phải cài thêm thư viện TTF.
+    }
+}
+
