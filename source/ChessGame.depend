@@ -1,0 +1,84 @@
+# depslib dependency file v1.0
+1744511951 source:e:\chessgame\source\main\main.cpp
+	<SDL.h>
+	"graphic.h"
+
+1744539629 e:\chessgame\source\main\graphic.h
+	<SDL.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<string>
+
+1744516377 source:e:\chessgame\source\piece\bishop.cpp
+	"bishop.h"
+	<cmath>
+
+1744769210 e:\chessgame\source\piece\bishop.h
+	"Piece.h"
+
+1744770888 e:\chessgame\source\piece\piece.h
+	<vector>
+
+1744464873 source:e:\chessgame\source\piece\king.cpp
+	"king.h"
+	<cmath>
+	<algorithm>
+
+1744769217 e:\chessgame\source\piece\king.h
+	"Piece.h"
+
+1744453813 source:e:\chessgame\source\piece\knight.cpp
+	"knight.h"
+	<cmath>
+
+1744769223 e:\chessgame\source\piece\knight.h
+	"Piece.h"
+
+1744454336 source:e:\chessgame\source\piece\pawn.cpp
+	"pawn.h"
+	<iostream>
+	<cmath>
+
+1744768793 e:\chessgame\source\piece\pawn.h
+	<vector>
+	"Piece.h"
+
+1744767992 source:e:\chessgame\source\piece\queen.cpp
+	"queen.h"
+	"rook.h"
+	"bishop.h"
+	<cmath>
+
+1744769229 e:\chessgame\source\piece\queen.h
+	"Piece.h"
+
+1744769157 e:\chessgame\source\piece\rook.h
+	<vector>
+	"Piece.h"
+
+1744773623 source:e:\chessgame\source\main\graphic.cpp
+	"graphic.h"
+	<iostream>
+	"board.h"
+
+1744773546 e:\chessgame\source\main\board.h
+	"king.h"
+	"queen.h"
+	"rook.h"
+	"bishop.h"
+	"knight.h"
+	"pawn.h"
+	<SDL.h>
+	<SDL_image.h>
+	<vector>
+	"Piece.h"
+	"graphic.h"
+
+1744773546 source:e:\chessgame\source\main\board.cpp
+	"board.h"
+	<iostream>
+	<algorithm>
+
+1744453740 source:e:\chessgame\source\piece\rook.cpp
+	"rook.h"
+

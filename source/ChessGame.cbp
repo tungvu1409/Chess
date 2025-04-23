@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ChessGame" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/ChessGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="E:/ChessGame/source/main" />
+					<Add directory="E:/ChessGame/source/piece" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/ChessGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="main/board.cpp" />
+		<Unit filename="main/board.h" />
+		<Unit filename="main/graphic.cpp" />
+		<Unit filename="main/graphic.h" />
+		<Unit filename="main/main.cpp" />
+		<Unit filename="main/main.h" />
+		<Unit filename="piece/Piece.h" />
+		<Unit filename="piece/bishop.cpp" />
+		<Unit filename="piece/bishop.h" />
+		<Unit filename="piece/king.cpp" />
+		<Unit filename="piece/king.h" />
+		<Unit filename="piece/knight.cpp" />
+		<Unit filename="piece/knight.h" />
+		<Unit filename="piece/pawn.cpp" />
+		<Unit filename="piece/pawn.h" />
+		<Unit filename="piece/queen.cpp" />
+		<Unit filename="piece/queen.h" />
+		<Unit filename="piece/rook.cpp" />
+		<Unit filename="piece/rook.h" />
+		<Unit filename="run/ChessGame.exe" />
+		<Unit filename="run/SDL2.dll" />
+		<Unit filename="run/SDL2_image.dll" />
+		<Unit filename="run/SDL2_mixer.dll" />
+		<Unit filename="run/SDL2_ttf.dll" />
+		<Unit filename="run/background.jpg" />
+		<Unit filename="run/background.png" />
+		<Unit filename="run/background1.png" />
+		<Unit filename="run/menu.wav" />
+		<Unit filename="run/move.wav" />
+		<Unit filename="run/start.wav" />
+		<Unit filename="run/times.ttf" />
+		<Unit filename="run/timesbd.ttf" />
+		<Unit filename="run/timesbi.ttf" />
+		<Unit filename="run/timesi.ttf" />
+		<Unit filename="run/winner.wav" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

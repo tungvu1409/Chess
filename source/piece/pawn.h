@@ -1,7 +1,7 @@
 #ifndef PAWN_H_INCLUDED
 #define PAWN_H_INCLUDED
-
-#include "piece.h"
+#include <vector>
+#include "Piece.h"
 
 class Pawn : public Piece {
 public:

@@ -29,7 +29,7 @@ void graphic::init()
         std::cerr << "TTF_Init failed: " << TTF_GetError() << std::endl;
     }
 
-    font = TTF_OpenFont("times.ttf", 48);
+    font = TTF_OpenFont("run/times.ttf", 48);
     if (!font)
     {
         std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
@@ -40,7 +40,7 @@ void graphic::init()
     {
         std::cerr << "Failed to initialize SDL_image: " << IMG_GetError() << std::endl;
     }
-    backgroundTexture = IMG_LoadTexture(renderer, "background1.png");
+    backgroundTexture = IMG_LoadTexture(renderer, "run/background1.png");
     if (!backgroundTexture) {
         std::cerr << "Failed to load background: " << IMG_GetError() << std::endl;
     }
@@ -52,24 +52,24 @@ void graphic::init()
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
     }
     // am thanh o menu
-    menuMusic = Mix_LoadMUS("menu.wav");
+    menuMusic = Mix_LoadMUS("run/menu.wav");
     if (!menuMusic) {
         std::cerr << "Failed to load menu music: " << Mix_GetError() << std::endl;
     } else {
         Mix_PlayMusic(menuMusic, -1);  // Fade in trong 2 giây
     }
     // am thanh khi an nut start
-    startSound = Mix_LoadWAV("start.wav");
+    startSound = Mix_LoadWAV("run/start.wav");
     if (!startSound) {
         std::cerr << "Failed to load move.wav: " << Mix_GetError() << std::endl;
     }
     // am thanh di chuyen quan co
-    moveSound = Mix_LoadWAV("move.wav");
+    moveSound = Mix_LoadWAV("run/move.wav");
     if (!moveSound) {
         std::cerr << "Failed to load move.wav: " << Mix_GetError() << std::endl;
     }
     // am thanh khi nguoi choi chien thang
-    winSound = Mix_LoadWAV("winner.wav");
+    winSound = Mix_LoadWAV("run/winner.wav");
     if (!winSound) {
         std::cerr << "Failed to load win sound: " << Mix_GetError() << std::endl;
     }
@@ -219,7 +219,7 @@ MenuResult graphic::showMenu()
     GameMode selectedMode = MODE_NONE;
     int timeLimit = 300; // mặc định 5 phút (tính bằng giây)
 
-    SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, "background.jpg");
+    SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, "run/background.jpg");
     if (!backgroundTexture)
     {
         std::cerr << "Failed to load background image: " << IMG_GetError() << std::endl;
@@ -233,14 +233,14 @@ MenuResult graphic::showMenu()
 
     bool isButtonPressed = false;
 
-    TTF_Font* largeFont = TTF_OpenFont("times.ttf", 120);
+    TTF_Font* largeFont = TTF_OpenFont("run/times.ttf", 120);
     if (!largeFont)
     {
         std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
         return {MODE_NONE, 0};
     }
 
-    TTF_Font* regularFont = TTF_OpenFont("times.ttf", 30);
+    TTF_Font* regularFont = TTF_OpenFont("run/times.ttf", 30);
     if (!regularFont)
     {
         std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
