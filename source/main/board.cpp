@@ -123,10 +123,6 @@ void Board::draw(SDL_Renderer* renderer) {
 
 }
 
-
-
-
-
 void Board::handleMouseClick(int x, int y, SDL_Renderer* renderer) {
     if (gameOver) return;
     int row = y / 75;
@@ -335,7 +331,7 @@ bool Board::kingCanMove(Piece* king, std::vector<Piece*>& pieces) {
         if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) continue;
 
         Piece* target = getPieceAt(newRow, newCol);
-        if (target && target->isWhite == king->isWhite) continue; /
+        if (target && target->isWhite == king->isWhite) continue;
 
 
         Piece* captured = nullptr;

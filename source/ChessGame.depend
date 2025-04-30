@@ -9,59 +9,61 @@
 	<SDL_mixer.h>
 	<string>
 
-1744516377 source:e:\chessgame\source\piece\bishop.cpp
+1746000031 source:e:\chessgame\source\piece\bishop.cpp
 	"bishop.h"
 	<cmath>
 
-1744769210 e:\chessgame\source\piece\bishop.h
+1746000256 e:\chessgame\source\piece\bishop.h
 	"Piece.h"
 
-1744770888 e:\chessgame\source\piece\piece.h
+1746000550 e:\chessgame\source\piece\piece.h
 	<vector>
 
-1744464873 source:e:\chessgame\source\piece\king.cpp
+1746019093 source:e:\chessgame\source\piece\king.cpp
 	"king.h"
+	"rook.h"
 	<cmath>
 	<algorithm>
 
-1744769217 e:\chessgame\source\piece\king.h
+1746013911 e:\chessgame\source\piece\king.h
 	"Piece.h"
 
-1744453813 source:e:\chessgame\source\piece\knight.cpp
+1746018128 source:e:\chessgame\source\piece\knight.cpp
 	"knight.h"
 	<cmath>
 
-1744769223 e:\chessgame\source\piece\knight.h
+1745384175 e:\chessgame\source\piece\knight.h
 	"Piece.h"
 
-1744454336 source:e:\chessgame\source\piece\pawn.cpp
+1746018737 source:e:\chessgame\source\piece\pawn.cpp
 	"pawn.h"
 	<iostream>
+	<cstring>
 	<cmath>
+	<algorithm>
 
-1744768793 e:\chessgame\source\piece\pawn.h
-	<vector>
+1746001281 e:\chessgame\source\piece\pawn.h
 	"Piece.h"
 
-1744767992 source:e:\chessgame\source\piece\queen.cpp
+1746017743 source:e:\chessgame\source\piece\queen.cpp
 	"queen.h"
 	"rook.h"
 	"bishop.h"
 	<cmath>
 
-1744769229 e:\chessgame\source\piece\queen.h
+1745384175 e:\chessgame\source\piece\queen.h
 	"Piece.h"
 
-1744769157 e:\chessgame\source\piece\rook.h
+1746001398 e:\chessgame\source\piece\rook.h
 	<vector>
 	"Piece.h"
 
-1744773623 source:e:\chessgame\source\main\graphic.cpp
+1746019774 source:e:\chessgame\source\main\graphic.cpp
 	"graphic.h"
 	<iostream>
 	"board.h"
 
-1744773546 e:\chessgame\source\main\board.h
+1746019208 e:\chessgame\source\main\board.h
 	"king.h"
 	"queen.h"
 	"rook.h"
@@ -74,11 +76,11 @@
 	"Piece.h"
 	"graphic.h"
 
-1744773546 source:e:\chessgame\source\main\board.cpp
+1746017927 source:e:\chessgame\source\main\board.cpp
 	"board.h"
 	<iostream>
 	<algorithm>
 
-1744453740 source:e:\chessgame\source\piece\rook.cpp
+1746017916 source:e:\chessgame\source\piece\rook.cpp
 	"rook.h"
 

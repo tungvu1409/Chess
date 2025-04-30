@@ -39,7 +39,6 @@
 		<Unit filename="main/graphic.cpp" />
 		<Unit filename="main/graphic.h" />
 		<Unit filename="main/main.cpp" />
-		<Unit filename="main/main.h" />
 		<Unit filename="piece/Piece.h" />
 		<Unit filename="piece/bishop.cpp" />
 		<Unit filename="piece/bishop.h" />

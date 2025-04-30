@@ -29,15 +29,19 @@ public:
     int getRow() const { return row; }
     int getCol() const { return col; }
     int getType() const { return type; }
-
+    bool twoStepped = false;  // Để biết tốt có vừa đi 2 ô không
     void setRow(int r) { row = r; }
     void setCol(int c) { col = c; }
-
-    void move(int newRow, int newCol) {
+    bool hasMoved;
+    bool currentPlayer;
+    void switchTurn() {
+        currentPlayer = !currentPlayer; // Đổi lượt giữa quân trắng và quân đen
+    }
+    // Phương thức di chuyển trong lớp Piece, được đánh dấu là virtual
+    virtual void move(int newRow, int newCol) {
         row = newRow;
         col = newCol;
     }
-
     virtual bool isValidMove(int newRow, int newCol, std::vector<Piece*>& pieces) {
         return false;
     }

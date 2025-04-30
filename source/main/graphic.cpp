@@ -79,6 +79,7 @@ void graphic::playMoveSound() {
         Mix_PlayChannel(-1, moveSound, 0);
     }
 }
+
 void graphic::run()
 {
     bool running = true;
@@ -89,15 +90,15 @@ void graphic::run()
 
     MenuResult menuResult = showMenu();
     if (menuResult.mode == MODE_NONE) return;
-    Mix_HaltMusic();                  // Dừng nhạc menu
-    Mix_FreeMusic(menuMusic);        // Giải phóng nhạc
+    Mix_HaltMusic();
+    Mix_FreeMusic(menuMusic);
     menuMusic = nullptr;
 
     board.whiteTimeLeft = menuResult.timeLimit;
     board.blackTimeLeft = menuResult.timeLimit;
     Uint32 lastTick = SDL_GetTicks(); // Thời điểm frame trước
     Uint32 lastSecondTick = SDL_GetTicks(); // Thời gian từ giây trước
-    bool gameOverNotified = false;  // Cờ để thông báo hết giờ chỉ một lần
+    bool gameOverNotified = false;
 
     while (running)
     {
@@ -135,6 +136,9 @@ void graphic::run()
                         menuMusic = Mix_LoadMUS("run/menu.wav");
                         Mix_PlayMusic(menuMusic, -1);
                         menuResult = showMenu();
+                        Mix_HaltMusic();
+                        Mix_FreeMusic(menuMusic);
+                        menuMusic = nullptr;
                         board.reset(menuResult.timeLimit);
 
                         gameOverNotified = false;
@@ -146,7 +150,7 @@ void graphic::run()
         }
 
         if (backgroundTexture) {
-            SDL_RenderCopy(renderer, backgroundTexture, nullptr, nullptr); // Vẽ background
+            SDL_RenderCopy(renderer, backgroundTexture, nullptr, nullptr); // draw background
         }
 
         // Kiểm tra xem một giây đã trôi qua chưa
@@ -166,15 +170,20 @@ void graphic::run()
             }
         }
 
-        // Kiểm tra hết giờ
+        // Check if the time is up
         if ((board.whiteTimeLeft <= 0 || board.blackTimeLeft <= 0) && !gameOverNotified) {
             board.gameOver = true;
-            gameOverNotified = true; // Đánh dấu là đã thông báo hết giờ
+            gameOverNotified = true;
 
-            std::cout << "Hết giờ! ";
+            std::cout << "time up! ";
             std::cout << (board.whiteTimeLeft <= 0 ? "Black wins!" : "White wins!") << std::endl;
         }
-
+        // check for draw (stalemate || insufficient material)
+        if ((board.isStalemate() || board.isInsufficientMaterial()) && !gameOverNotified) {
+            board.gameOver = true;
+            gameOverNotified = true;
+            std::cout << "The game has ended in a draw!\n";
+        }
         board.draw(renderer);
 
         // Hiển thị "Check!" nếu có
@@ -210,8 +219,16 @@ void graphic::run()
         // Nếu hết giờ và thông báo đã được kích hoạt, hiển thị thông báo "Game Over"
         if (board.gameOver) {
             SDL_Color red = {255, 0, 0, 255};
-            std::string gameOverMessage = (board.whiteTimeLeft <= 0) ? "Black wins!" : "White wins!";
+            std::string gameOverMessage;
 
+            // Nếu có người thắng
+            if (board.whiteTimeLeft <= 0) {
+                gameOverMessage = "Black wins!";
+            } else if (board.blackTimeLeft <= 0) {
+                gameOverMessage = "White wins!";
+            } else {
+                gameOverMessage = "    Draw!"; // Hiển thị hòa nếu là kết quả hòa
+            }
             // Vẽ bảng thông báo
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180); // Màu nền bảng (đen với độ mờ)
             SDL_Rect messageBox = {150, 200, 500, 250}; // Vị trí và kích thước của bảng
@@ -225,19 +242,19 @@ void graphic::run()
             renderText(renderer, font, gameOverMessage, red, 270, 240);
 
             // Vẽ các nút "Rematch" và "Menu"
-            SDL_Rect btnRematch = {301, 289, 179, 53}; // Nút Rematch
-            SDL_Rect btnMenu = {323, 359, 134, 53};    // Nút Menu
+            SDL_Rect btnRematch = {301, 289, 179, 53};
+            SDL_Rect btnMenu = {323, 359, 134, 53};
 
-            SDL_SetRenderDrawColor(renderer, 169, 169, 169, 255); // Màu xám cho nút
+            SDL_SetRenderDrawColor(renderer, 169, 169, 169, 255);
             SDL_RenderFillRect(renderer, &btnRematch);
             SDL_RenderFillRect(renderer, &btnMenu);
 
-            SDL_Color whiteText = {255, 255, 255, 255}; // Màu trắng cho chữ
+            SDL_Color whiteText = {255, 255, 255, 255};
             renderText(renderer, font, "Rematch", whiteText, 300, 285);
             renderText(renderer, font, "Menu", whiteText, 330, 350);
 
-            if (Mix_Playing(-1) == 0) { // Nếu không có âm nào đang phát
-                Mix_PlayChannel(-1, winSound, 0);  // Tiếp tục phát nhạc nếu game kết thúc
+            if (Mix_Playing(-1) == 0) {
+                Mix_PlayChannel(-1, winSound, 0);
             }
         }
 
@@ -245,7 +262,7 @@ void graphic::run()
         SDL_Delay(16);  // Delay để giới hạn FPS
     }
 
-    // Giải phóng tài nguyên âm thanh
+
     Mix_FreeChunk(moveSound);
     Mix_CloseAudio();
 
@@ -279,7 +296,7 @@ MenuResult graphic::showMenu()
     SDL_Color white = {255, 255, 255, 255};
     SDL_Color shadowColor = {0, 0, 0, 255};
 
-    bool isButtonPressed = false;
+
 
     TTF_Font* largeFont = TTF_OpenFont("run/times.ttf", 120);
     if (!largeFont)
@@ -317,7 +334,7 @@ MenuResult graphic::showMenu()
                 if (x >= btnPvP.x && x <= btnPvP.x + btnPvP.w &&
                     y >= btnPvP.y && y <= btnPvP.y + btnPvP.h)
                 {
-                    isButtonPressed = true;
+
 
                     SDL_RenderClear(renderer);
                     if (backgroundTexture)
@@ -361,7 +378,7 @@ MenuResult graphic::showMenu()
         renderText(renderer, largeFont, titleText, shadowColor, titleX + 3, titleY + 3);
         renderText(renderer, largeFont, titleText, white, titleX, titleY);
 
-        // Nút Start
+        // Start button
         SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
         SDL_RenderFillRect(renderer, &btnPvP);
         int textW, textH;
