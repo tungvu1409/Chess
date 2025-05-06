@@ -315,11 +315,9 @@ Piece* Board::getKing(bool white) {
 
 
 bool Board::kingCanMove(Piece* king, std::vector<Piece*>& pieces) {
-    int directions[8][2] = {
-        {-1, -1}, {-1, 0}, {-1, 1},
-        {0, -1},          {0, 1},
-        {1, -1},  {1, 0}, {1, 1}
-    };
+    int directions[8][2] = {{-1, -1}, {-1, 0}, {-1, 1},
+                            {0, -1},           {0, 1},
+                            {1, -1},  {1, 0},  {1, 1}};
 
     int oldRow = king->getRow();
     int oldCol = king->getCol();
@@ -328,31 +326,39 @@ bool Board::kingCanMove(Piece* king, std::vector<Piece*>& pieces) {
         int newRow = oldRow + dir[0];
         int newCol = oldCol + dir[1];
 
-        if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) continue;
 
-        Piece* target = getPieceAt(newRow, newCol);
-        if (target && target->isWhite == king->isWhite) continue;
-
-
-        Piece* captured = nullptr;
-        if (target) {
-            captured = target;
-            pieces.erase(std::remove(pieces.begin(), pieces.end(), target), pieces.end());
-        }
-
-        king->move(newRow, newCol);
-
-        if (isInCheck(king->isWhite)) {
-            king->move(oldRow, oldCol);
-            if (captured) pieces.push_back(captured);
+        if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
             continue;
         }
 
+
+        Piece* target = getPieceAt(newRow, newCol);
+        if (target && target->isWhite == king->isWhite) {
+            continue;
+        }
+
+        bool isValidMove = true;
+        std::vector<Piece*> tempPieces = pieces;
+
+        if (target) {
+
+            tempPieces.erase(std::remove(tempPieces.begin(), tempPieces.end(), target), tempPieces.end());
+        }
+
+
+        king->move(newRow, newCol);
+
+
+        if (isInCheck(king->isWhite)) {
+            isValidMove = false;
+        }
+
+
         king->move(oldRow, oldCol);
 
-        if (captured) pieces.push_back(captured);
-
-        return true;
+        if (isValidMove) {
+            return true;
+        }
     }
 
     return false;
@@ -369,25 +375,43 @@ bool Board::isSquareUnderAttack(int row, int col, bool whiteKing) {
 // ======================================== CHECKMATE FUNCTION ===============================================
 bool Board::isCheckmate(bool whiteKing) {
 
+    if (!isInCheck(whiteKing)) {
+        return false;
+    }
+
+
     Piece* king = getKing(whiteKing);
     if (!king) return false;
-    if (kingCanMove(king, pieces)) return false;
+
+    if (kingCanMove(king, pieces)) {
+        return false;
+    }
+
 
     for (Piece* p : pieces) {
-        if (p->isWhite == whiteKing) {
+        if (p->isWhite == whiteKing && p->getType() != KING) {
             for (int row = 0; row < 8; ++row) {
                 for (int col = 0; col < 8; ++col) {
                     if (p->canMoveTo(row, col, pieces)) {
+
                         Piece* captured = getPieceAt(row, col);
                         int oldRow = p->getRow();
                         int oldCol = p->getCol();
+
+
                         if (captured) {
                             pieces.erase(std::remove(pieces.begin(), pieces.end(), captured), pieces.end());
                         }
                         p->move(row, col);
+
                         bool stillInCheck = isInCheck(whiteKing);
+
+
                         p->move(oldRow, oldCol);
-                        if (captured) pieces.push_back(captured);
+                        if (captured) {
+                            pieces.push_back(captured);
+                        }
+
                         if (!stillInCheck) {
                             return false;
                         }
@@ -396,6 +420,8 @@ bool Board::isCheckmate(bool whiteKing) {
             }
         }
     }
+
+
     return true;
 }
 
@@ -406,7 +432,7 @@ bool Board::isKingInCheck(bool isWhite)
     King* king = nullptr;
     for (Piece* piece : pieces) {
         if (piece->getType() == KING && piece->isWhite == isWhite) {
-            king = dynamic_cast<King*>(piece);  // Tìm quân vua của đúng màu
+            king = dynamic_cast<King*>(piece);
             break;
         }
     }
@@ -431,10 +457,10 @@ Piece* Board::showPromotionMenu(int row, int col, bool turnIsWhite, SDL_Renderer
     SDL_Event event;
 
     // Define button areas for promotion choices
-    SDL_Rect queenButton = {100, 400, 100, 50};   // Nữ hoàng
-    SDL_Rect rookButton = {210, 400, 100, 50};    // Xe
-    SDL_Rect knightButton = {320, 400, 100, 50};  // Mã
-    SDL_Rect bishopButton = {430, 400, 100, 50};  // Tượng
+    SDL_Rect queenButton = {100, 400, 100, 50};
+    SDL_Rect rookButton = {210, 400, 100, 50};
+    SDL_Rect knightButton = {320, 400, 100, 50};
+    SDL_Rect bishopButton = {430, 400, 100, 50};
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderFillRect(renderer, &queenButton);

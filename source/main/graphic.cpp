@@ -153,10 +153,10 @@ void graphic::run()
             SDL_RenderCopy(renderer, backgroundTexture, nullptr, nullptr); // draw background
         }
 
-        // Kiểm tra xem một giây đã trôi qua chưa
+
         Uint32 currentTick = SDL_GetTicks();
-        Uint32 deltaTime = currentTick - lastTick;
-        lastTick = currentTick;
+
+
 
         // Giảm thời gian mỗi giây (1 giây trôi qua)
         if (currentTick - lastSecondTick >= 1000) {
@@ -216,26 +216,25 @@ void graphic::run()
         std::string timeB =  std::to_string(minutesB) + ":" + (secondsB < 10 ? "0" : "") + std::to_string(secondsB);
         renderText(renderer, font, timeB, black, 655, 550);
 
-        // Nếu hết giờ và thông báo đã được kích hoạt, hiển thị thông báo "Game Over"
+
         if (board.gameOver) {
             SDL_Color red = {255, 0, 0, 255};
             std::string gameOverMessage;
 
-            // Nếu có người thắng
-            if (board.whiteTimeLeft <= 0) {
-                gameOverMessage = "Black wins!";
-            } else if (board.blackTimeLeft <= 0) {
-                gameOverMessage = "White wins!";
-            } else {
-                gameOverMessage = "    Draw!"; // Hiển thị hòa nếu là kết quả hòa
+
+            if (board.isStalemate() || board.isInsufficientMaterial()) {
+                gameOverMessage = "    Draw!";
+            }
+            else{
+                gameOverMessage = "Game Over";
             }
             // Vẽ bảng thông báo
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180); // Màu nền bảng (đen với độ mờ)
-            SDL_Rect messageBox = {150, 200, 500, 250}; // Vị trí và kích thước của bảng
-            SDL_RenderFillRect(renderer, &messageBox);  // Vẽ nền bảng
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180);
+            SDL_Rect messageBox = {150, 200, 500, 250};
+            SDL_RenderFillRect(renderer, &messageBox);
 
             // Vẽ viền cho bảng
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Viền trắng
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             SDL_RenderDrawRect(renderer, &messageBox);
 
             // Hiển thị thông điệp "Game Over"
@@ -449,5 +448,4 @@ void graphic::renderText(SDL_Renderer* renderer, TTF_Font* font, const std::stri
     SDL_RenderCopy(renderer, texture, nullptr, &dst);
     SDL_DestroyTexture(texture);
 }
-
 

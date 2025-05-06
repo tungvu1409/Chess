@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1744511951 source:e:\chessgame\source\main\main.cpp
+1746517224 source:e:\chessgame\source\main\main.cpp
 	<SDL.h>
 	"graphic.h"
 
-1744539629 e:\chessgame\source\main\graphic.h
+1746533977 e:\chessgame\source\main\graphic.h
 	<SDL.h>
 	<SDL_ttf.h>
 	<SDL_mixer.h>
@@ -58,12 +58,12 @@
 	<vector>
 	"Piece.h"
 
-1746019774 source:e:\chessgame\source\main\graphic.cpp
+1746533977 source:e:\chessgame\source\main\graphic.cpp
 	"graphic.h"
 	<iostream>
 	"board.h"
 
-1746019208 e:\chessgame\source\main\board.h
+1746517224 e:\chessgame\source\main\board.h
 	"king.h"
 	"queen.h"
 	"rook.h"
@@ -76,11 +76,24 @@
 	"Piece.h"
 	"graphic.h"
 
-1746017927 source:e:\chessgame\source\main\board.cpp
+1746532964 source:e:\chessgame\source\main\board.cpp
 	"board.h"
 	<iostream>
 	<algorithm>
 
 1746017916 source:e:\chessgame\source\piece\rook.cpp
 	"rook.h"
+
+1746514259 source:e:\chessgame\source\main\aiengine.cpp
+	"AIEngine.h"
+	<iostream>
+	<windows.h>
+	<string>
+	<array>
+
+1746514333 e:\chessgame\source\main\aiengine.h
+	<string>
+	<windows.h>
+
+1746515048 source:e:\chessgame\source\main\ai.cpp
 

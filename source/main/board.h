@@ -13,8 +13,18 @@
 
 #include "graphic.h"
 struct Board {
-    Piece* board[8][8];
+
     SDL_Texture* pieceTextures[12];
+
+
+    void init(SDL_Renderer* renderer);
+
+
+
+    void draw(SDL_Renderer* renderer);
+
+
+
     std::vector<Piece*> pieces;
     Piece* selectedPiece = nullptr;
     Piece* getPieceAt(int row, int col);
@@ -23,8 +33,7 @@ struct Board {
     Piece* showPromotionMenu(int row, int col, bool turnIsWhite, SDL_Renderer* renderer);
     Board(graphic& g) : gfx(g) {} // Constructor nhận tham chiếu graphic
 
-    void draw(SDL_Renderer* renderer);
-    void init(SDL_Renderer* renderer);
+
     void handleMouseClick(int x, int y, SDL_Renderer* renderer);
 
     bool gameOver = false;
